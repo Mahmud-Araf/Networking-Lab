@@ -1,0 +1,229 @@
+ \documentclass[11pt]{article}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{natbib}
+
+\begin{document}
+
+\begin{titlepage}
+	\begin{center}
+		\includegraphics[scale=0.10]{du.jpeg}\par
+		\begin{Huge}
+			\textsc{University of Dhaka}\par
+		\end{Huge}
+		\begin{Large}
+			Department of Computer Science and Engineering\par \vspace{1cm}
+			CSE-3111 : Computer Networking Lab \\[12pt]
+			Lab Report 1 : LAN Configuration and Troubleshooting Tools
+		\end{Large}
+	\end{center}
+	\begin{large}
+		\textbf{Submitted By:\\[12pt]}
+		Name : Md. Imran Shorif Shuvo\\[8pt]
+		Roll No : SH-56\\[12pt]
+		\textbf{Submitted On : \\[12pt]}
+		January 21, 2024\\[20pt]
+		\textbf{Submitted To :\\[12pt]}
+		Dr. Md. Abdur Razzaque\\[12pt]
+		Dr. Md Mamunur Rashid\\[12pt]
+		Dr. Md. Ibrahim\\[12pt]
+		Mr. Md. Redwan Ahmed Rizvee
+	\end{large}
+\end{titlepage}
+
+\section{Introduction}
+The lab's main goal is to familiarize with some troubleshooting tools (Ping, Traceroute, ARP, Static Routing, Netstat, Ifconfig, nslookup, whois, etc.) and learn how to utilize them in computer networks.
+
+\subsection{Objectives}
+Write down two or three specific objectives of this lab experiment.
+\begin{itemize}
+	\item To demonstrate LAN configuration and troubleshooting skills using a range of tools and methods for different LANs, such as Ethernet and Wi-Fi networks.
+	\item To check the competency in using tools like ping, traceroute, network analyzers, and network monitoring tools to find and diagnose network problems.
+
+\end{itemize}
+%%%%
+%%%%
+\section{Theory}
+A group of connected devices that may communicate with one another across a wired or wireless network is known as a local area network (LAN). LANs connect computers, servers, printers, and other devices within a limited geographic region, such as a home, business, or building. Configuring a LAN involves setting up the network infrastructure, which consists of routers, switches, and access points, as well as configuring the network settings on each connected device.
+
+This includes assigning IP addresses, subnet masks, and default gateways to each device as well as configuring security settings to protect the network from unauthorized access. Locating and resolving any potential connectivity or performance issues are part of troubleshooting a LAN.
+
+These techniques and technologies could entail checking the network configuration, looking at network activity, and finding and resolving network device conflicts.
+
+The general objective of the LAN setup and troubleshooting tools lab report is to demonstrate the ability to build, manage, and troubleshoot a LAN as well as to succinctly and clearly document the lab procedures and results.
+
+
+
+
+\section{Methodology}
+
+\subsection{PING}
+Ping is a command-line program used to test the network connectivity of two devices. It sends an Internet Control Message Protocol (ICMP) echo request packet to a specific host and then waits for an ICMP echo reply packet. A measurement and report of the packet's round-trip time from source to destination and return are subsequently given to the user.
+
+The syntax for the ping command is normally "ping [hostname/IP address]." Four ICMP echo request packets will be sent by Ping at first, and it will continue to do so until the user cancels the instruction. The user can also specify the number of packets to send and the size of the packets by using the -c and -s parameters.
+
+\subsection{TRACEROUTE}
+Traceroute is a command-line program that is used to display the path that a packet follows from its origin to its destination. It functions by sending a series of ICMP echo request packets with a Time-to-Live (TTL) value that is rising. As each packet travels the network path, routers along the way reduce the TTL value. When the TTL value reaches zero, the router notifies the source that "time exceeded" has occurred. Traceroute uses these messages to ascertain the path that the packets took.
+
+Traceroute is also used to identify routing issues such as network congestion or improperly setup routers. Additionally, it can be used to pinpoint a host's location and calculate how long it takes a packet to travel from its origin to its destination.
+
+Traceroute commands often have the syntax "traceroute [hostname/IP address]." Traceroute can optionally use TCP or UDP in addition to the ICMP echo request packets it uses by default. Most OS including Windows, Linux, and macOS, support it.
+\subsection{IFCONFIG}
+On Unix-like operating systems like Linux, network interface configuration is done using the command-line tool ifconfig, which stands for "interface configuration." It can be used to change a device's IP addresses, subnet masks, and other network settings. Using ifconfig, you may view the current status of your network interfaces, including their IP address, netmask, and MAC address.
+
+The basic syntax for ifconfig is "ifconfig [interface] [options]," where "interface" denotes the name of the network interface you desire to configure (for instance, "eth0" for the initial Ethernet interface) and "options" denotes the specific parameters you wish to employ.
+
+For instance, you might type "ifconfig eth0" to see the "eth0" interface's current state. If you want to give the "eth0" interface an IP address, type "ifconfig eth0 192.168.1.10 netmask 255.255.255.0" on your computer's command line.
+
+Additionally, we can use ifconfig to monitor interface statistics, assign a new MAC address to an interface, and bring up or down an interface. Other alternatives include:
+\begin{itemize}
+	\item up: bring an interface up
+	\item down: bring an interface down
+	\item hw ether xx:xx:xx:xx:xx:xx: set the MAC address
+	\item -a : display all interfaces, active and inactive
+\end{itemize}
+
+ifconfig is a powerful tool that can be used to configure network interfaces. However, it is not recommended to use it on modern systems because it's being deprecated in favor of iproute2, a more modern and versatile tool.
+
+\subsection{ARP}
+The communication method known as ARP, or Address Resolution Protocol, converts a network address, such as an IP address, into a physical (MAC) address on a local network. When the host's network layer address is the only one accessible, the hardware address of the host is determined using this address. The mapping of an IP address to a corresponding MAC address enables hosts on a network to communicate with one another. ARP runs in the Data Link Layer of the OSI Model.
+\subsection{RARP}
+Reverse Address Resolution Protocol is known as RARP. When a host's physical (MAC) address is known, it is utilized to ascertain the IP address of the host. Similar to ARP, it operates at the OSI Model's Data Link Layer.
+\subsection{NSLOOKUP}
+NSLOOKUP is an abbreviation for Name Server Lookup. It is a command-line tool for investigating DNS-related problems. It is used to query DNS servers in order to obtain details regarding host addresses, mail servers, and other domain name-related data. It can be used to discover a website's IP address, a domain's mail server, or other DNS details. When an email is not delivered or a website won't load, DNS-related problems can be identified using the results of an NSLOOKUP query. On Windows command prompts and Linux/macOS terminals, we can run NSLOOKUP. It enables us to look up data on a certain domain name or IP address by contacting a specific DNS server.
+\subsection{NETSTAT}
+Network Statistics is referred to as NETSTAT. It is a command-line tool used to show details about a computer's network connections. It can be used to check whether ports are open, the state of a connection, and the process that is currently utilizing a given connection. The routing table and the status of the IP, TCP, UDP, and ICMP protocols can also be seen using NETSTAT.
+
+Both Windows' command prompt and Linux's/macOS' terminal allows to execute NETSTAT. You can display particular information using the NETSTAT command's many options, including:
+
+-a : Shows all active connections and the ports they are using
+-b : Shows the executable involved in creating each connection or listening port
+-n : Displays addresses and port numbers in numerical form
+-o : Shows the owning process ID associated with each connection
+-r: Displays the routing table
+
+NETSTAT can be a helpful tool for resolving network-related problems, such as figuring out what's causing a spike in network usage or locating open ports that could be dangerous.
+
+We will see links to some files that the server provided. If we click any of them we can download them in our pc.
+
+\section{Experimental result}
+
+Some Snapshots of the troubleshooting tools are given below:
+\newpage
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\textwidth]{ping-check.png}
+	\caption{Use of ping command}
+\end{figure}
+
+% \begin{figure}[!h]
+% \centering
+% \includegraphics[width=\textwidth]{ping_c.png}
+% \caption{Use of ping -c command}
+% \end{figure}
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\textwidth]{new-ss-traceroute-check.png}
+	\caption{Use of traceroute command}
+\end{figure}
+
+\newpage
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\textwidth]{ss4-define-num-of-probes.png}
+	\caption{Use of traceroute -N command [Defining the number of probes]}
+\end{figure}
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\textwidth]{new-ss-limiting-num-of-probes.png}
+	\caption{Use of traceroute -m command [Limiting the number of hops]}
+\end{figure}
+
+\newpage
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\textwidth]{new-ss11-ifconfig-all-settings.png}
+	\caption{Use of ifconfig command}
+\end{figure}
+
+\newpage
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\textwidth]{ss14-enable-or-disable-network-interface.png}
+	% \includegraphics[width=\textwidth]{ifconfig_down2.png}
+	\caption{Enable or disable connection using ifconfig enp3s0 up/down command}
+\end{figure}
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\textwidth]{ss18-change-all-address.png}
+	% \includegraphics[width=\textwidth]{ifconfig_up2.png}
+	\caption{Changing all address with ifconfig}
+\end{figure}
+
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\textwidth]{ss20-enable-promisc-mode.png}
+	\includegraphics[width=\textwidth]{ss21-disable-promisc-mode.png}
+	\caption{Enabling or disabling Pro Misc mode}
+\end{figure}
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\textwidth]{ss22-add-new-alias.png}
+	\includegraphics[width=\textwidth]{ss23-remove-alias.png}
+	\caption{Adding and Removing of new Alias}
+\end{figure}
+
+\newpage
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\textwidth]{arp_a.png}
+	\caption{Use of arp -a command}
+\end{figure}
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\textwidth]{more.png}
+	\caption{Use of more command}
+\end{figure}
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\textwidth]{nslookup.png}
+	\caption{Use of nslookup command}
+\end{figure}
+
+\newpage
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\textwidth]{netstat_a.png}
+	\caption{Use of netstat -a command}
+\end{figure}
+
+\newpage
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\textwidth]{netstat_st.png}
+	\caption{Use of netstat -st command}
+\end{figure}
+
+\newpage
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\textwidth]{netstat_su.png}
+	\caption{Use of netstat -su command}
+\end{figure}
+
+% \newpage
+% \bibliographystyle{plain}
+% \bibliography{refs}
+% \nocite{*}
+
+
+
+\end{document}

@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass[11pt]{report}
 
 \usepackage{graphicx}
 \usepackage{url}
@@ -17,7 +17,7 @@
             Lab Report 1 : Lab exercises on LAN configuration and troubleshooting tools
         \end{Large}
     \end{center}
-    \begin{large}
+    \begin{center}
         \textbf{Submitted By:\\[12pt]}
         Name : Zisan Mahmud\\[8pt]
         Roll No : 23\\[12pt]
@@ -29,35 +29,337 @@
         Dr. Md. Abdur Razzaque\\[12pt]
         Dr. Md Mamunur Rashid\\[12pt]
         Dr. Muhammad Ibrahim\\[12pt]
-        Mr. Md. Redwan Ahmed Rizvee
-    \end{large}
+        Mr. Md. Redwan Ahmed Rizvee\\[12pt]
+    \end{center}
 \end{titlepage}
 
 \section{Introduction}
-
-The primary objective of this lab is to familiarize with few network troubleshooting tools like PING, TRACEROUTE, IFCONFIG, ARP, RARP, NSLOOKUP, NETSTAT etc. These tools are a necessity for every network administrator.
-
+In this lab, the main goal is to become acquainted with essential network troubleshooting tools 
+such as PING, TRACEROUTE, IFCONFIG, ARP, RARP, NSLOOKUP, NETSTAT.Proficiency in utilizing these tools is crucial for network administrators to effectively manage and troubleshoot network issues.
 \section{Objectives}
 \begin{itemize}
-    \item
-    \item
-    \item
+    \item This lab evaluates the ability to use tools like ping, traceroute, network analyzers, and monitoring tools for identifying and diagnosing network problems.
+    \item This lab equips us with the skills needed for effective network administration, fostering competence in managing and troubleshooting LAN networks.
+    \item This lab also introduces us to deeper concepts of data communication, package routing, LAN, Ethernet, and Wi-Fi configurations.
 \end{itemize}
 %%%
 %%%
 \section{Theory}
+A Local Area Network or simply LAN constitutes a network of 
+interconnected devices within a limited geographic region,facilitating communication via either wired or wireless connections. 
+This network encompasses computers, servers, 
+printers, and other devices, all of which necessitate systematic configuration for optimal functionality.
+The LAN infrastructure involves essential components such as routers, switches, and access points. Individual device settings, including IP addresses, subnet masks, and default gateways, 
+are configured to establish seamless communication.Integral to the LAN setup and troubleshooting process is 
+the utilization of terminal commands that empower administrators to diagnose and resolve connectivity issues.
+The following commands play a crucial role in this endeavor:
 
+\vspace{\baselineskip}
+\textbf{ping:} \\
+\texttt{ping} is employed to assess the reachability of a target device within the network. It sends packets to the target and reports the round-trip time, aiding in identifying potential communication problems.
 
+\vspace{\baselineskip}
+\vspace{\baselineskip}
+
+\textbf{traceroute:} \\
+\texttt{traceroute} reveals the path taken by data packets between the source and destination devices. It helps identify potential bottlenecks or issues along the route.
+
+\textbf{ifconfig:} \\
+\texttt{ifconfig} provides information about the network interfaces of a device, allowing administrators to review and configure settings such as IP addresses, subnet masks, and interface status.
+
+\textbf{arp and rarp:} \\
+\texttt{arp} resolves IP addresses to MAC addresses, while \texttt{rarp} performs the reverse, resolving MAC addresses to IP addresses. These commands are valuable for addressing issues related to address resolution.
+
+\textbf{nslookup:} \\
+\texttt{nslookup} is employed to query DNS servers for information about domain names and IP addresses, aiding in the resolution of domain-related issues.
+
+\textbf{netstat:} \\
+\texttt{netstat} provides a snapshot of a device's network connections, routing tables, and interface statistics. This command is instrumental in identifying active connections and potential issues affecting network performance.
+\vspace{\baselineskip}
+
+In summary, the LAN setup and troubleshooting tools aims to showcase proficiency in employing these terminal commands. The documentation should articulate the methodologies applied, highlight the results obtained through these commands, and provide a comprehensive overview of the troubleshooting process.
 
 \section{Methodology}
 
 \subsection{PING}
+\textbf{ping:} \\
+The \texttt{ping} command is a fundamental network diagnostic tool used to assess the reachability and responsiveness of a target device within a network. It operates by sending a series of small data packets, known as "echo requests," to the target device and measuring the time it takes for the device to send back corresponding "echo replies."
+\vspace{\baselineskip}
+\vspace{\baselineskip}
+\vspace{\baselineskip}
+\vspace{\baselineskip}
+
+\textbf{Syntax:}
+\texttt{ping [options] destination}
+\vspace{\baselineskip}
+
+\textbf{Usage:}
+\begin{itemize}
+    \item \texttt{ping example.com} - Sends ICMP echo requests to the specified domain or IP address.
+    \item \texttt{ping -c 4 example.com} - Sends only 4 packets for the test.
+\end{itemize}
+
+\vspace{\baselineskip}
+
+\textbf{Functionality:}
+
+1. \textbf{Assessing Reachability:} \texttt{ping} helps verify whether a target device is reachable over the network. A successful ping indicates that the target device is responsive and can be reached.
+
+2. \textbf{Round-Trip Time (RTT):} \texttt{ping} measures the Round-Trip Time (RTT), which is the time taken for an echo request to travel from the source device to the target device and back. This provides insights into the latency or delay in the network.
+
+3. \textbf{Packet Loss:} \texttt{ping} also reports on packet loss, indicating the percentage of sent packets that did not receive a reply. High packet loss can signify network congestion or connectivity issues.
+
+\vspace{\baselineskip}
+
+\textbf{Options:} \\
+\texttt{-c count:} Specifies the number of echo requests to send.\\
+\texttt{-i interval:} Sets the time interval between sending echo requests.\\
+\texttt{-s packetsize:} Defines the size of the data packets to send.\\
+\texttt{-t timeout:} Sets the maximum time to wait for an echo reply.\\
+
+\textbf{Use Cases:} \\
+1. \textbf{Basic Connectivity Check:} \texttt{ping} is commonly used to verify the basic connectivity between devices, such as checking if a computer can communicate with a server.
+
+2. \textbf{Troubleshooting Network Issues:} When experiencing network connectivity problems, administrators often use \texttt{ping} to diagnose issues such as high latency, packet loss, or unresponsive devices.
+
+3. \textbf{Monitoring Network Stability:} System administrators use \texttt{ping} in network monitoring tools to continuously assess the stability and performance of network connections over time.
+
+
 \subsection{TRACEROUTE}
+\textbf{traceroute:} \\
+The \texttt{traceroute} command is a network diagnostic tool used to visualize and analyze the route that data packets take from the source device to a target destination across a network. It helps identify the intermediary devices (routers) along the path and measure the time it takes for packets to traverse each hop.
+
+\vspace{\baselineskip}
+
+\textbf{Syntax:}
+\texttt{traceroute [options] destination}
+
+\vspace{\baselineskip}
+
+\textbf{Usage:}
+\begin{itemize}
+    \item \texttt{traceroute example.com} - Traces the route to the specified domain or IP address.
+    \item \texttt{traceroute -m 20 example.com} - Limits the maximum number of hops to 20.
+\end{itemize}
+
+\vspace{\baselineskip}
+
+\textbf{Functionality:}
+
+1. \textbf{Visualizing Network Route:} \texttt{traceroute} displays a list of routers (hops) through which data packets traverse from the source to the destination. It helps identify the path taken by packets across the network.
+
+2. \textbf{Measuring Hop Delays:} The tool measures the time it takes for an individual packet to travel from the source to each intermediary router, providing insights into the latency at each hop.
+
+\vspace{\baselineskip}
+
+\textbf{Options:} \\
+\texttt{-m max\_hops:} Specifies the maximum number of hops to search for the target.\\
+\texttt{-n:} Skips DNS resolution for faster results.\\
+\texttt{-w waittime:} Defines the maximum time to wait for a response at each hop.
+
+\vspace{\baselineskip}
+
+\textbf{Use Cases:}\\
+1. \textbf{Network Path Analysis:} \texttt{traceroute} is used to analyze the path taken by data packets, providing a visual representation of network routes.\\
+2. \textbf{Diagnosing Latency Issues:} Network administrators utilize \texttt{traceroute} to identify and troubleshoot latency problems at specific hops along the route.\\
+3. \textbf{Determining Network Congestion:} By observing delays and packet loss at certain hops, administrators can infer potential network congestion points.
+
+
 \subsection{IFCONFIG}
+\textbf{ifconfig:} \\
+The \texttt{ifconfig} command, short for "interface configuration," is a powerful network utility used to view and configure network interfaces on a Unix or Unix-like operating system. It provides information about the current state of network interfaces and allows administrators to modify their configuration settings.
+
+\vspace{\baselineskip}
+
+\textbf{Syntax:}
+\texttt{ifconfig [interface] [options]}
+
+\vspace{\baselineskip}
+
+\textbf{Usage:}
+\begin{itemize}
+    \item \texttt{ifconfig} - Displays information for all active network interfaces.
+    \item \texttt{ifconfig eth0 up} - Brings up the specified network interface.
+\end{itemize}
+
+\vspace{\baselineskip}
+
+\textbf{Functionality:}
+
+1. \textbf{Displaying Interface Information:} \texttt{ifconfig} without any options provides a comprehensive overview of all active network interfaces, including IP addresses, MAC addresses, and operational status.
+
+2. \textbf{Activating/Deactivating Interfaces:} The command can be used to bring up or down specific network interfaces, controlling their operational state.
+
+3. \textbf{Configuring IP Addresses:} Administrators can use \texttt{ifconfig} to assign or change the IP address, subnet mask, and other parameters of a network interface.
+
+\vspace{\baselineskip}
+
+\textbf{Options:} \\
+\texttt{up:} Activates the specified network interface.\\
+\texttt{down:} Deactivates the specified network interface.\\
+\texttt{inet addr:} Specifies the IPv4 address for the interface.\\
+\texttt{netmask:} Sets the subnet mask for the interface.\\
+\texttt{hw ether:} Assigns a specific MAC address to the interface.
+
+\vspace{\baselineskip}
+\vspace{\baselineskip}
+\vspace{\baselineskip}
+
+\textbf{Use Cases:} \\
+1. \textbf{Interface Configuration:} \texttt{ifconfig} is commonly used to configure the network interfaces on a system, including assigning IP addresses and activating or deactivating interfaces.\\
+2. \textbf{Troubleshooting Connectivity:} Administrators leverage \texttt{ifconfig} to diagnose and troubleshoot network connectivity issues by inspecting the status and configuration of network interfaces.\\
+3. \textbf{Monitoring Network Traffic:} The command provides real-time information about network interfaces, enabling administrators to monitor network traffic and identify potential issues.
+
 \subsection{ARP}
+\textbf{arp:} \\
+The \texttt{arp} command, standing for "Address Resolution Protocol," is used to display and manipulate the mapping between IP addresses and MAC addresses on a local network. It is instrumental in resolving IP addresses to their corresponding hardware addresses.
+
+\vspace{\baselineskip}
+
+\textbf{Syntax:}
+\texttt{arp [options] [hostname]}
+
+\vspace{\baselineskip}
+
+\textbf{Usage:}
+\begin{itemize}
+    \item \texttt{arp -a} - Displays the ARP cache, listing the IP and MAC addresses of devices on the local network.
+    \item \texttt{arp -d 192.168.1.1} - Deletes the ARP cache entry for the specified IP address.
+\end{itemize}
+
+\vspace{\baselineskip}
+
+\textbf{Functionality:}
+
+1. \textbf{IP to MAC Resolution:} \texttt{arp} is used to map and display the IP address to MAC address resolution table, which is crucial for local network communication.
+
+2. \textbf{ARP Cache Management:} Administrators can view, add, or remove entries from the ARP cache to control the IP-to-MAC address mappings.
+
+\vspace{\baselineskip}
+
+\textbf{Options:} \\
+\texttt{-a:} Displays the ARP cache.\\
+\texttt{-d address:} Deletes a specific entry in the ARP cache.\\
+\texttt{-s address MAC:} Adds a static ARP cache entry.
+
+\vspace{\baselineskip}
+
+\textbf{Use Cases:} \\
+1. \textbf{Network Troubleshooting:} \texttt{arp} is used to troubleshoot network issues by inspecting and managing ARP cache entries.\\
+2. \textbf{MAC Address Discovery:} The command is employed to discover the MAC addresses of devices on the local network.
+
+\vspace{\baselineskip}
+
 \subsection{RARP}
+\textbf{rarp:} \\
+The \texttt{rarp} command, or "Reverse Address Resolution Protocol," is a network protocol used to map a MAC address to an IP address. It is primarily used in legacy systems and diskless workstations.
+
+\vspace{\baselineskip}
+
+\textbf{Syntax:}
+\texttt{rarp [options] [hardware\_address]}
+
+\vspace{\baselineskip}
+
+\textbf{Usage:}
+\begin{itemize}
+    \item \texttt{rarp -a} - Displays the RARP table, listing MAC addresses and corresponding IP addresses.
+\end{itemize}
+
+\vspace{\baselineskip}
+
+\textbf{Functionality:}
+
+1. \textbf{MAC to IP Resolution:} \texttt{rarp} is used to map and display the MAC address to IP address resolution table, allowing systems to obtain their IP addresses.
+
+\vspace{\baselineskip}
+
+\textbf{Options:} \\
+\texttt{-a:} Displays the RARP table.
+
+\vspace{\baselineskip}
+
+\textbf{Use Cases:} \\
+1. \textbf{Legacy System Support:} \texttt{rarp} is utilized in environments with diskless workstations that require IP address assignment based on MAC addresses.
+
+\vspace{\baselineskip}
+
 \subsection{NSLOOKUP}
+\textbf{nslookup:} \\
+The \texttt{nslookup} command is a network tool used to query Domain Name System (DNS) servers to obtain information about domain names, IP addresses, and other DNS records.
+
+\vspace{\baselineskip}
+
+\textbf{Syntax:}
+\texttt{nslookup [options] [hostname]}
+
+\vspace{\baselineskip}
+
+\textbf{Usage:}
+\begin{itemize}
+    \item \texttt{nslookup example.com} - Queries DNS for information about the specified domain.
+    \item \texttt{nslookup 192.168.1.1} - Resolves the IP address to a domain name.
+\end{itemize}
+
+\vspace{\baselineskip}
+
+\textbf{Functionality:}
+
+1. \textbf{Domain Name Resolution:} \texttt{nslookup} is used to translate domain names to IP addresses and vice versa.
+
+2. \textbf{Querying DNS Records:} Administrators can use the command to query various DNS records, such as MX, CNAME, and NS records.
+
+\vspace{\baselineskip}
+
+\textbf{Options:} \\
+\texttt{-type=record\_type:} Specifies the type of DNS record to query.
+
+\vspace{\baselineskip}
+
+\textbf{Use Cases:} \\
+1. \textbf{DNS Troubleshooting:} \texttt{nslookup} is employed to troubleshoot DNS-related issues by querying DNS records.\\
+2. \textbf{IP Address Resolution:} The command is used to resolve IP addresses to domain names.
+
+\vspace{\baselineskip}
+
 \subsection{NETSTAT}
+\textbf{netstat:} \\
+The \texttt{netstat} command is a network utility that provides information about network connections, routing tables, interface statistics, masquerade connections, and multicast memberships on a Unix-like operating system.
+
+\vspace{\baselineskip}
+
+\textbf{Syntax:}
+\texttt{netstat [options]}
+
+\vspace{\baselineskip}
+
+\textbf{Usage:}
+\begin{itemize}
+    \item \texttt{netstat -a} - Displays all active connections and listening ports.
+    \item \texttt{netstat -r} - Shows the routing table.
+\end{itemize}
+
+\vspace{\baselineskip}
+
+\textbf{Functionality:}
+
+1. \textbf{Connection Information:} \texttt{netstat} provides details about active network connections, including local and remote addresses, protocols, and connection states.
+
+2. \textbf{Routing Table Display:} The command displays the routing table, showing the paths that network packets take.
+
+\vspace{\baselineskip}
+
+\textbf{Options:} \\
+\texttt{-a:} Displays all connections and listening ports.\\
+\texttt{-r:} Shows the routing table.\\
+\texttt{-i:} Displays a list of network interfaces.
+
+\vspace{\baselineskip}
+
+\textbf{Use Cases:} \\
+1. \textbf{Monitoring Network Connections:} \texttt{netstat} is used to monitor active network connections and identify potential issues.\\
+2. \textbf{Routing Table Analysis:} The command is employed to analyze the routing table and diagnose routing-related problems.
+
 
 \section{Experimental Result}
 
