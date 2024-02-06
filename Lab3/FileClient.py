@@ -34,9 +34,9 @@ while True:
 
         if response == 'OK':
             # Send the file size to the server
+          if os.path.exists(os.getcwd()+'/'+filename):
             file_size = os.path.getsize(filename)
             client_socket.send(str(file_size).encode())
-
             # Send the file to the server
             with open(filename, 'rb') as file:
                 while True:
@@ -45,6 +45,9 @@ while True:
                         break
                     client_socket.send(bytes_to_send)
             print(client_socket.recv(1024).decode())
+          else:
+            print('File not found')
+            client_socket.send('File not found'.encode())
     elif operation == 'download':
         # Send the filename to the server
         filename = input('Enter the filename: ')

@@ -38,6 +38,7 @@ def handle_client(client_socket,client_address):
                 for file in files:
                     send_data += file + '\n'
                 client_socket.send(send_data.encode())
+                print(f"File list sent to {client_address}")
         elif operation == 'upload':
             # Receive the filename
             filename = client_socket.recv(1024).decode()
@@ -48,8 +49,12 @@ def handle_client(client_socket,client_address):
                 client_socket.send('OK'.encode())
                 print(f"uploading from {client_address}")
 
+                res = client_socket.recv(1024).decode()
+                if res == 'File not found':
+                    print('File not found')
+                    continue
                 # Receive the file size
-                file_size = int(client_socket.recv(1024).decode())
+                file_size = int(res)
 
                 with open(cwpath+server_path+'/'+filename, 'wb') as file:
                     print(f'Saving file {filename}')
@@ -58,6 +63,8 @@ def handle_client(client_socket,client_address):
                         file_data = client_socket.recv(1024)
                         received_size += len(file_data)
                         file.write(file_data)
+                
+                print(f"File {filename} uploaded successfully from {client_address}")
                 
                 client_socket.send('File uploaded successfully'.encode())
 
@@ -76,6 +83,7 @@ def handle_client(client_socket,client_address):
                         if not file_data:
                             break
                         client_socket.send(file_data)
+                print(f"File {filename} downloaded successfully to {client_address}")
             else:
                 client_socket.send('File does not exist'.encode())
         else:
