@@ -1,4 +1,6 @@
 import socket
+import time
+import struct
 
 IP = 'localhost'
 ROOT_PORT = 8001
@@ -11,14 +13,33 @@ root_records = {
     'com': TLD_PORT,
 }
 
+def encode_dns_query(question,answer,flag):
+    id = int(time.time())
+    q = 1
+    a = 1
+    auth_rr = 0
+    add_rr = 0
+    question = question.encode(FORMAT)
+    answer = answer.encode(FORMAT)
+    packed_data = struct.pack(f'!7i{len(question)}s{len(answer)}s', id, flag, q, a, auth_rr, add_rr, len(question), question, answer)
+    return packed_data
+
+def decode_dns_query(data):
+    id, flag, q, a, auth_rr, add_rr, len_question = struct.unpack('!7i', data[:28])
+    question = data[28:28+len_question].decode(FORMAT)
+    answer = data[28+len_question:].decode(FORMAT)
+    return id, flag, q, a, auth_rr, add_rr, question, answer
+
 def handle_query(data, addr, server):
-    query = data.decode(FORMAT).split('.')[-1]  
+    id, flag, q, a, auth_rr, add_rr, question, answer = decode_dns_query(data)
+    query = question
+    query = query.split('.')[-1]
     print(f"Root Server received query: {query}")
 
     if query in root_records:
-        server.sendto(str(root_records[query]).encode(FORMAT), addr)
+        server.sendto(encode_dns_query(question,str(root_records[query]),1), addr)
     else:
-        server.sendto(str(TLD_PORT).encode(FORMAT), addr)
+        server.sendto(encode_dns_query(question,str(TLD_PORT),1), addr)
 
 def start_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

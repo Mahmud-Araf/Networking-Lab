@@ -8,6 +8,9 @@ ROOT_PORT = 8001
 BUFFER_SIZE = 1024
 FORMAT = "utf-8"
 
+local_records = {
+}
+
 def encode_dns_query(question,answer,flag):
     id = int(time.time())
     q = 1
@@ -32,6 +35,12 @@ def handle_query(data, addr, server):
     
     print(f"Local Server received query: {query} from {addr}")
 
+    if query in local_records:
+        print(f"IP address found in local records")
+        server.sendto(local_records[query].encode(FORMAT), addr)
+        print(f"IP address sent to {addr}")
+        return
+
     packed_data = encode_dns_query(query, "None",0)
 
     # Send to Root Server
@@ -41,24 +50,16 @@ def handle_query(data, addr, server):
     id, flag, q, a, auth_rr, add_rr, question, answer = decode_dns_query(response)
 
     print(f"Local Server received response: {answer}")
-    i = 0
-    while i<3:
-        if validate_ip(answer):
-            server.sendto(answer.encode(FORMAT), addr)
-            print(f"IP address sent to {addr}")
-            break
-        elif i == 2 :
-            server.sendto(answer.encode(FORMAT), addr)
-            break
-        else:
-            next_server_port = int(answer)
-            server.sendto(encode_dns_query(query,"None",0), (IP, next_server_port))
-
-            response, _ = server.recvfrom(BUFFER_SIZE)
-            id, flag, q, a, auth_rr, add_rr, question, answer = decode_dns_query(response)
-            print(f"Local Server received response: {answer} from {next_server_port}")
-
-        i+=1
+    if validate_ip(answer):
+        local_records.update({query: answer})
+        print(f"IP address added to local records")
+        server.sendto(answer.encode(FORMAT), addr)
+        print(f"IP address sent to {addr}")
+        
+    else:
+        server.sendto(answer.encode(FORMAT), addr)
+        print(f"IP address Not Found")
+    
     
 
 def validate_ip(s):

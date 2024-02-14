@@ -1,14 +1,16 @@
-import socket,time,struct
+import socket
+import time
+import struct
 
 IP = 'localhost'
+ROOT_PORT = 8001
 TLD_PORT = 8002
-AUTH_PORT = 8003
 BUFFER_SIZE = 1024
 FORMAT = "utf-8"
 
-tld_records = {
-    'cse.du.ac.bd': AUTH_PORT,
-    'google.com': AUTH_PORT,
+root_records = {
+    'bd': TLD_PORT,
+    'com': TLD_PORT,
 }
 
 def encode_dns_query(question,answer,flag):
@@ -30,19 +32,39 @@ def decode_dns_query(data):
 
 def handle_query(data, addr, server):
     id, flag, q, a, auth_rr, add_rr, question, answer = decode_dns_query(data)
-    print(f"TLD Server received query: {question}")
-
     query = question
+    print(f"Root Server received query: {query}")
 
-    if query in tld_records:
-        server.sendto(encode_dns_query(query,str(tld_records[query]),1), addr)
+    if query in root_records:
+        server.sendto(encode_dns_query(question,str(root_records[query]),1), addr)
     else:
-        server.sendto(encode_dns_query(query,str(AUTH_PORT),1), addr)
+        server.sendto(encode_dns_query(question,str(TLD_PORT),0), (IP,TLD_PORT))
+
+        response, _ = server.recvfrom(BUFFER_SIZE)
+
+        id, flag, q, a, auth_rr, add_rr, question, answer = decode_dns_query(response)
+
+        if validate_ip(answer):
+            root_records.update({query: answer})
+        server.sendto(encode_dns_query(query,answer,1), addr)   
+        
+        
+def validate_ip(s):
+    a = s.split('.')
+    if len(a) != 4:
+        return False
+    for x in a:
+        if not x.isdigit():
+            return False
+        i = int(x)
+        if i < 0 or i > 255:
+            return False
+    return True        
 
 def start_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    server.bind((IP, TLD_PORT))
-    print(f"TLD Server listening on {IP}:{TLD_PORT}")
+    server.bind((IP, ROOT_PORT))
+    print(f"Root Server listening on {IP}:{ROOT_PORT}")
 
     while True:
         data, addr = server.recvfrom(BUFFER_SIZE)

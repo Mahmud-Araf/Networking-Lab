@@ -1,14 +1,13 @@
 import socket,time,struct
 
 IP = 'localhost'
-TLD_PORT = 8002
 AUTH_PORT = 8003
 BUFFER_SIZE = 1024
 FORMAT = "utf-8"
 
-tld_records = {
-    'cse.du.ac.bd': AUTH_PORT,
-    'google.com': AUTH_PORT,
+auth_records = {
+    'cse.du.ac.bd': '192.0.2.3',
+    'google.com': '142.250.193.110'
 }
 
 def encode_dns_query(question,answer,flag):
@@ -29,20 +28,22 @@ def decode_dns_query(data):
     return id, flag, q, a, auth_rr, add_rr, question, answer
 
 def handle_query(data, addr, server):
-    id, flag, q, a, auth_rr, add_rr, question, answer = decode_dns_query(data)
-    print(f"TLD Server received query: {question}")
+    id , flag, q, a, auth_rr, add_rr, question, answer = decode_dns_query(data)
+    print(f"Authoritative Server received query: {question} from {addr}")
 
     query = question
 
-    if query in tld_records:
-        server.sendto(encode_dns_query(query,str(tld_records[query]),1), addr)
+    if query in auth_records:
+        server.sendto(encode_dns_query(query,auth_records[query],1), addr)
+        print(f"Authoritative Server sent response: {auth_records[query]} to {addr}")
     else:
-        server.sendto(encode_dns_query(query,str(AUTH_PORT),1), addr)
+        server.sendto(encode_dns_query(query,"Not Found",1),addr)
+        print(f"Authoritative Server sent response: Not Found to {addr}")
 
 def start_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    server.bind((IP, TLD_PORT))
-    print(f"TLD Server listening on {IP}:{TLD_PORT}")
+    server.bind((IP, AUTH_PORT))
+    print(f"Authoritative Server listening on {IP}:{AUTH_PORT}")
 
     while True:
         data, addr = server.recvfrom(BUFFER_SIZE)

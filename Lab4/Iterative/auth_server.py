@@ -1,4 +1,4 @@
-import socket
+import socket,time,struct
 
 IP = 'localhost'
 AUTH_PORT = 8003
@@ -10,14 +10,33 @@ auth_records = {
     'google.com': '142.250.193.110'
 }
 
+def encode_dns_query(question,answer,flag):
+    id = int(time.time())
+    q = 1
+    a = 1
+    auth_rr = 0
+    add_rr = 0
+    question = question.encode(FORMAT)
+    answer = answer.encode(FORMAT)
+    packed_data = struct.pack(f'!7i{len(question)}s{len(answer)}s', id, flag, q, a, auth_rr, add_rr, len(question), question, answer)
+    return packed_data
+
+def decode_dns_query(data):
+    id, flag, q, a, auth_rr, add_rr, len_question = struct.unpack('!7i', data[:28])
+    question = data[28:28+len_question].decode(FORMAT)
+    answer = data[28+len_question:].decode(FORMAT)
+    return id, flag, q, a, auth_rr, add_rr, question, answer
+
 def handle_query(data, addr, server):
-    query = data.decode(FORMAT)
-    print(f"Authoritative Server received query: {query}")
+    id , flag, q, a, auth_rr, add_rr, question, answer = decode_dns_query(data)
+    print(f"Authoritative Server received query: {question} from {addr}")
+
+    query = question
 
     if query in auth_records:
-        server.sendto(auth_records[query].encode(FORMAT), addr)
+        server.sendto(encode_dns_query(query,auth_records[query],1), addr)
     else:
-        server.sendto("Not Found".encode(FORMAT),addr)
+        server.sendto(encode_dns_query(query,"Not Found",1),addr)
 
 def start_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

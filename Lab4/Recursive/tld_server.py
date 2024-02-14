@@ -7,8 +7,6 @@ BUFFER_SIZE = 1024
 FORMAT = "utf-8"
 
 tld_records = {
-    'cse.du.ac.bd': AUTH_PORT,
-    'google.com': AUTH_PORT,
 }
 
 def encode_dns_query(question,answer,flag):
@@ -37,7 +35,25 @@ def handle_query(data, addr, server):
     if query in tld_records:
         server.sendto(encode_dns_query(query,str(tld_records[query]),1), addr)
     else:
-        server.sendto(encode_dns_query(query,str(AUTH_PORT),1), addr)
+        server.sendto(encode_dns_query(query,str(AUTH_PORT),0), (IP, AUTH_PORT))
+        response, _ = server.recvfrom(BUFFER_SIZE)
+        id, flag, q, a, auth_rr, add_rr, question, answer = decode_dns_query(response)
+        if validate_ip(answer):
+            tld_records.update({query: answer})
+        server.sendto(encode_dns_query(query,answer,1), addr)
+
+
+def validate_ip(s):
+    a = s.split('.')
+    if len(a) != 4:
+        return False
+    for x in a:
+        if not x.isdigit():
+            return False
+        i = int(x)
+        if i < 0 or i > 255:
+            return False
+    return True          
 
 def start_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
