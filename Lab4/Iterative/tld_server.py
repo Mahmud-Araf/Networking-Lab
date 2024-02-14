@@ -35,8 +35,10 @@ def handle_query(data, addr, server):
     query = question
 
     if query in tld_records:
+        print(f"TLD Server sending response: {tld_records[query]} to {addr}")
         server.sendto(encode_dns_query(query,str(tld_records[query]),1), addr)
     else:
+        print(f"Record is not found redirecting to Authoritative Server {AUTH_PORT}")
         server.sendto(encode_dns_query(query,str(AUTH_PORT),1), addr)
 
 def start_server():

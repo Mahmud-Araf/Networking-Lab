@@ -48,6 +48,7 @@ def handle_query(data, addr, server):
             print(f"IP address sent to {addr}")
             break
         elif i == 2 :
+            print("Local Server sending response: Not Found")
             server.sendto(answer.encode(FORMAT), addr)
             break
         else:

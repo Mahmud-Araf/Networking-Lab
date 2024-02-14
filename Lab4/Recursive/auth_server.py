@@ -35,10 +35,10 @@ def handle_query(data, addr, server):
 
     if query in auth_records:
         server.sendto(encode_dns_query(query,auth_records[query],1), addr)
-        print(f"Authoritative Server sent response: {auth_records[query]} to {addr}")
+        print(f"Authoritative Server sent response: {auth_records[query]} to TLD Server {addr}")
     else:
         server.sendto(encode_dns_query(query,"Not Found",1),addr)
-        print(f"Authoritative Server sent response: Not Found to {addr}")
+        print(f"Authoritative Server sent response: Not Found to TLD Server {addr}")
 
 def start_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

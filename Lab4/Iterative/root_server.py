@@ -37,8 +37,10 @@ def handle_query(data, addr, server):
     print(f"Root Server received query: {query}")
 
     if query in root_records:
+        print(f"Root Server sending response: {root_records[query]} to {addr}")
         server.sendto(encode_dns_query(question,str(root_records[query]),1), addr)
     else:
+        print(f"Record not found redirecting to TLD Server {TLD_PORT}")
         server.sendto(encode_dns_query(question,str(TLD_PORT),1), addr)
 
 def start_server():

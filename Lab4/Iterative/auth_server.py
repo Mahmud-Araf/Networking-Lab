@@ -34,8 +34,10 @@ def handle_query(data, addr, server):
     query = question
 
     if query in auth_records:
+        print(f"Authoritative Server sending response: {auth_records[query]} to {addr}")
         server.sendto(encode_dns_query(query,auth_records[query],1), addr)
     else:
+        print(f"Sending response: Not Found to {addr}")
         server.sendto(encode_dns_query(query,"Not Found",1),addr)
 
 def start_server():

@@ -44,12 +44,13 @@ def handle_query(data, addr, server):
     packed_data = encode_dns_query(query, "None",0)
 
     # Send to Root Server
+    print(f"Local Server sending query to Root Server {ROOT_PORT}")
     server.sendto(packed_data, (IP, ROOT_PORT))
 
     response, server_addr = server.recvfrom(BUFFER_SIZE)
     id, flag, q, a, auth_rr, add_rr, question, answer = decode_dns_query(response)
 
-    print(f"Local Server received response: {answer}")
+    print("Local Server received response from Root Server")
     if validate_ip(answer):
         local_records.update({query: answer})
         print(f"IP address added to local records")

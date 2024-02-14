@@ -33,14 +33,18 @@ def handle_query(data, addr, server):
     query = question
 
     if query in tld_records:
+        print("Record found in TLD records.Senting response to Root Server")
         server.sendto(encode_dns_query(query,str(tld_records[query]),1), addr)
     else:
+        print(f"Record not found redirecting to Authoritative Server {AUTH_PORT}")
         server.sendto(encode_dns_query(query,str(AUTH_PORT),0), (IP, AUTH_PORT))
         response, _ = server.recvfrom(BUFFER_SIZE)
+        print(f"TLD Server received response from Authoritative Server {AUTH_PORT}")
         id, flag, q, a, auth_rr, add_rr, question, answer = decode_dns_query(response)
         if validate_ip(answer):
             tld_records.update({query: answer})
         server.sendto(encode_dns_query(query,answer,1), addr)
+        print(f"TLD Server sent response to Root Server")
 
 
 def validate_ip(s):
