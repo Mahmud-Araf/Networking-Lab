@@ -17,4 +17,8 @@ def send_query(query):
 if __name__ == "__main__":
     while True:
         query = input("Enter your DNS query: ")
+        starttime = time.time()
         send_query(query)
+        endtime = time.time()
+        print(f"Time taken: {((endtime-starttime)*1000):.2f} milliseconds")
+        

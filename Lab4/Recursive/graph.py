@@ -6,12 +6,12 @@ data = pd.read_csv('data.csv')
 
 # Plot the data
 plt.figure(figsize=(10,6))
-plt.plot(data['process_no'], data['time_taken'])
+plt.plot(data['request_no'], data['time_taken'])
 
 # Add labels and title
-plt.xlabel('Error(%)')
-plt.ylabel('Time Taken for 100 requests(milliseconds)')
-plt.title('Time Delay over Error Rate')
+plt.xlabel('Request_no')
+plt.ylabel('Time taken in milliseconds')
+plt.title('Time Delay over Request')
 
 # Show the plot
 plt.show()

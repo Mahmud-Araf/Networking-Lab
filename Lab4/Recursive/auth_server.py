@@ -7,7 +7,10 @@ FORMAT = "utf-8"
 
 auth_records = {
     'cse.du.ac.bd': '192.0.2.3',
-    'google.com': '142.250.193.110'
+    'google.com': '142.250.193.110',
+    'ns1.cse.du.ac.bd':'192.0.2.1',
+    'ns2.cse.du.ac.bd':'192.0.2.2',
+    'mail.cse.du.ac.bd':'192.0.2.4'
 }
 
 def encode_dns_query(question,answer,flag):
