@@ -1,7 +1,7 @@
 import socket
 import struct
 
-ADDR = ('192.168.175.68', 8000)
+ADDR = ('localhost', 9000)
 SIZE = 1024
 FORMAT = 'utf-8'
 
@@ -26,8 +26,9 @@ def main():
 
     answer_len = len(msg) - answer_start
     answer = struct.unpack(f'!{answer_len}s', msg[answer_start:])[0].decode(FORMAT)
-
-    # print(f"id: {id}, flag: {flag}, q: {q}, a: {a}, auth_rr: {auth_rr}, add_rr: {add_rr}, question: {question}, answer: {answer}")
+    
+    print("After decoding:")
+    print(f"id: {id}, flag: {flag}, q: {q}, a: {a}, auth_rr: {auth_rr}, add_rr: {add_rr}, question: {question}, answer: {answer}")
     print(f"IP Address: {answer}")
 
         

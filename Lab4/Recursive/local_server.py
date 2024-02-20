@@ -1,15 +1,26 @@
 import socket
 import struct
 import time
+import threading
 
 IP = 'localhost'
 LOCAL_PORT = 8000
 ROOT_PORT = 8001
 BUFFER_SIZE = 1024
 FORMAT = "utf-8"
+TTL = 3
 
 local_records = {
 }
+
+def is_expired(record, ttl_value):
+    start = time.time()
+    while True:
+        end = time.time()
+        if end - start > ttl_value:
+            local_records.pop(record)
+            print(f"Record {record} expired after {ttl_value} seconds. Removed from Local records.")
+            break
 
 def encode_dns_query(question,answer,flag):
     id = int(time.time())
@@ -53,6 +64,7 @@ def handle_query(data, addr, server):
     print("Local Server received response from Root Server")
     if validate_ip(answer):
         local_records.update({query: answer})
+        threading.Thread(target=is_expired, args=(query, TTL)).start()
         print(f"IP address added to local records")
         server.sendto(answer.encode(FORMAT), addr)
         print(f"IP address sent to {addr}")

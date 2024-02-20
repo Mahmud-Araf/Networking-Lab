@@ -1,17 +1,28 @@
 import socket
 import time
 import struct
+import threading
 
 IP = 'localhost'
 ROOT_PORT = 8001
 TLD_PORT = 8002
 BUFFER_SIZE = 1024
 FORMAT = "utf-8"
-
+TTL = 6
 root_records = {
     'bd': TLD_PORT,
     'com': TLD_PORT,
 }
+
+def is_expired(record, ttl_value):
+    start = time.time()
+    while True:
+        end = time.time()
+        if end - start > ttl_value:
+            root_records.pop(record)
+            print(f"Record {record} expired after {ttl_value} seconds. Removed from Root records.")
+            break
+
 
 def encode_dns_query(question,answer,flag):
     id = int(time.time())
@@ -48,7 +59,9 @@ def handle_query(data, addr, server):
         id, flag, q, a, auth_rr, add_rr, question, answer = decode_dns_query(response)
 
         if validate_ip(answer):
+            print("Record added to root records")
             root_records.update({query: answer})
+            threading.Thread(target=is_expired, args=(query, TTL)).start()
         server.sendto(encode_dns_query(query,answer,1), addr)
         print(f"Root Server sent response to Local Server") 
         

@@ -5,7 +5,7 @@ import struct
 import time
 
 IP = ''
-PORT = 8000
+PORT = 9000
 ADDR = (IP, PORT)
 VOLUME = 1024
 FORMAT = "utf-8"
