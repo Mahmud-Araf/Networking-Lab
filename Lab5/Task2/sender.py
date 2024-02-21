@@ -47,6 +47,11 @@ print(f'Accepted connection from {address}')
 file = open('file_to_send.txt', 'rb')
 file_size = os.path.getsize('file_to_send.txt')
 
+file1 = open('samplertt.csv', 'w')
+f2 = open('estimatedrtt.csv', 'w')
+file1.write("no,sampleRTT\n")
+f2.write("no,estimatedRTT\n")
+
 sequence_number = 0
 last_ack = 0    
 dup_count = 0
@@ -71,7 +76,7 @@ def getTimeout(estimatedRTT,devRTT):
 packet = client_socket.recv(1500)
 source_port, destination_port, seq, ack, flag, window, payloadlen, payload = packet_decode(packet)
 last_ack = ack
-
+i =1
 while True:
     stime = time.time()
     if sequence_number+window == last_ack:
@@ -135,7 +140,9 @@ while True:
         print('Did not receive acknowledgment')
     etime = time.time()
     sampleRTT = etime-stime
+    file1.write(f'{i},{round(sampleRTT*1000,4)}\n')
     estimatedRTT = getEstimatedRTT(sampleRTT,prevestimatedRTT)
+    f2.write(f'{i},{round(estimatedRTT*1000,4)}\n')
     devRTT = getDevRTT(sampleRTT,estimatedRTT,prevdevRTT)
     timeout = getTimeout(estimatedRTT,devRTT)
     prevestimatedRTT = estimatedRTT
@@ -145,6 +152,7 @@ while True:
     print("devRTT: ",round(devRTT*1000,4),"ms")
     print("timeout: ",round(timeout*1000,4),"ms")
     client_socket.settimeout(timeout)
+    i+=1
 
 # Close file
 file.close()

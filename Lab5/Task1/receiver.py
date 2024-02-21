@@ -81,6 +81,9 @@ with open('received_file.txt', 'wb') as file:
             break
 endtime = time.time()
 print("file received in", round(endtime - start_time,2), "seconds")
+file_size = os.path.getsize('received_file.txt')
+print(f'Throughput: {(file_size/ (endtime-start_time))/1000.0} B/s')
+
 client_socket.close()
 print("Connection closed")
 
