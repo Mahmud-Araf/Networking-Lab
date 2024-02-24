@@ -1,6 +1,6 @@
 import socket
 import time
-import struct
+import struct,threading
 
 IP = 'localhost'
 ROOT_PORT = 8001
@@ -50,7 +50,7 @@ def start_server():
 
     while True:
         data, addr = server.recvfrom(BUFFER_SIZE)
-        handle_query(data, addr, server)
+        threading.Thread(target=handle_query, args=(data, addr, server)).start()
 
 if __name__ == "__main__":
     start_server()
