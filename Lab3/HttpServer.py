@@ -1,4 +1,4 @@
-import http.server
+from http.server import SimpleHTTPRequestHandler
 import socketserver
 import os
 import json
@@ -7,7 +7,7 @@ PATH = os.getcwd()+"/files"
 
 PORT = 12349
 
-class FileHandler(http.server.SimpleHTTPRequestHandler):
+class FileHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/list':
             self.send_response(200)
@@ -45,6 +45,6 @@ class FileHandler(http.server.SimpleHTTPRequestHandler):
 if __name__ == "__main__":
     os.makedirs('files', exist_ok=True)
     handler = FileHandler
-    with socketserver.TCPServer(("", PORT), handler) as httpd:
+    with socketserver.ThreadingTCPServer(("", PORT), handler) as httpd:
         print(f"Serving on port {PORT}")
         httpd.serve_forever()
