@@ -96,7 +96,7 @@ file.close()
 
 endtime = time.time()
 
-print(f'Throughput: {(file_size/ (endtime-starting_time))/1000.0} B/s')
+print(f'Throughput: {(file_size/ (endtime-starting_time))} B/s')
     
 # Close sockets
 client_socket.close()

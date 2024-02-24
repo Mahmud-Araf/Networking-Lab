@@ -33,13 +33,13 @@ def packet_encode(seq, ack, window, flag, payloadlen, payload, destination_port)
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind(('localhost', 8500))
-server_socket.listen(1)
+server_socket.listen(10)
 
 print('Server is listening for incoming connections')
 
 client_socket, address = server_socket.accept()
 destination_port = address[1]
-client_socket.settimeout(5)
+
 
 print(f'Accepted connection from {address}')
 
@@ -157,7 +157,7 @@ while True:
 # Close file
 file.close()
 
-print(f'Throughput: {(file_size/ (time.time()-starting_time))/1000.0} B/s')
+print(f'Throughput: {(file_size/ (time.time()-starting_time))} B/s')
     
 # Close sockets
 client_socket.close()
