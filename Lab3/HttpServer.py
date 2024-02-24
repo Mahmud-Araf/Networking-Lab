@@ -1,5 +1,5 @@
 from http.server import SimpleHTTPRequestHandler
-import socketserver
+from socketserver import ThreadingTCPServer
 import os
 import json
 
@@ -45,6 +45,6 @@ class FileHandler(SimpleHTTPRequestHandler):
 if __name__ == "__main__":
     os.makedirs('files', exist_ok=True)
     handler = FileHandler
-    with socketserver.ThreadingTCPServer(("", PORT), handler) as httpd:
+    with ThreadingTCPServer(("", PORT), handler) as httpd:
         print(f"Serving on port {PORT}")
         httpd.serve_forever()
