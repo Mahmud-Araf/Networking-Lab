@@ -134,7 +134,7 @@ while True:
                 congestion_avoidance()
          elif dup_count == 3:
             duplicate_end = time.time()
-            if duplicate_end - duplicate_start < halfwindowtime:
+            if duplicate_end - duplicate_start > halfwindowtime:
                 print("Triple duplicate ack. Fast Recovery mode activated")
                 fast_recovery()
                 fr = True
