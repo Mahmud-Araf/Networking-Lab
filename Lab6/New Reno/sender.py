@@ -8,6 +8,7 @@ source_port = 9500
 fr = False
 cwnd = 1
 ssthresh = 400
+dup_flag = False
 
 halfwindowtime = .3
 
@@ -134,14 +135,23 @@ while True:
                 congestion_avoidance()
          elif dup_count == 3:
             duplicate_end = time.time()
-            if duplicate_end - duplicate_start > halfwindowtime:
+            if (duplicate_end - duplicate_start > halfwindowtime) and dup_flag == False:
                 print("Triple duplicate ack. Fast Recovery mode activated")
                 fast_recovery()
                 fr = True
                 recovery_sequence_number = last_ack
                 dup_count = 0
-            else:
+                dup_flag = True
+            elif (duplicate_end - duplicate_start > halfwindowtime):
+                dup_flag = False
+                print("Triple duplicate ack. Fast Recovery mode activated")
+                fast_recovery()
+                fr = True
+                recovery_sequence_number = last_ack
                 dup_count = 0
+            elif dup_flag:
+                dup_count = 0
+             
         
          elif cli_ack == last_ack:
             dup_count += 1
