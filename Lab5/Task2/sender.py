@@ -2,7 +2,7 @@ import socket
 import time
 import os
 
-source_port = 8500
+source_port = 9500
 
 packet_queue = {
 
@@ -32,7 +32,7 @@ def packet_encode(seq, ack, window, flag, payloadlen, payload, destination_port)
     return packet
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_socket.bind(('localhost', 8500))
+server_socket.bind(('localhost', 9500))
 server_socket.listen(10)
 
 print('Server is listening for incoming connections')
@@ -78,10 +78,13 @@ source_port, destination_port, seq, ack, flag, window, payloadlen, payload = pac
 last_ack = ack
 i =1
 while True:
+    
     stime = time.time()
     if sequence_number+window == last_ack:
         payload = file.read(window)
         if not payload:
+            packet = packet_encode(-1,ack_number,window,1,0,"".encode('utf-8'),destination_port)
+            client_socket.send(packet)
             break
         payload_size=len(payload)
         print("size: ",payload_size)
