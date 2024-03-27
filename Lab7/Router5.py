@@ -47,12 +47,6 @@ distanceArray = np.array (np.full((ROWS , COLS) , np.inf))
 class Color:
   RED = '\033[91m'
   GREEN = '\033[92m'
-  YELLOW = '\033[93m'
-  BLUE = '\033[94m'
-  MAGENTA = '\033[95m'
-  CYAN = '\033[96m'
-  WHITE = '\033[97m'
-  RESET = '\033[0m'
   END = "\033[0m"
 
 def read_file(file_name):
@@ -116,7 +110,7 @@ def dijkstra(graph, start):
 
   end_time = time.time() * 1000
   total_time = end_time - start_time
-  s_print(Color.GREEN + f"Dijkstra Running Time: {total_time}ms" + Color.END)
+  s_print(Color.GREEN + f"Dijkstra's Algorithm Running Time: {total_time}ms" + Color.END)
                   
   return shortest_distances, parent
 
@@ -128,7 +122,7 @@ def create_packet(content: str):
   packet_id = f"{ID}00000000{message_id}"
   message_id += 1
   LSP = f"{packet_id}#{TTL}#{content}"
-  s_print(f"created packet with id: {packet_id}")
+  s_print(f"Packet sent: {packet_id}")
   return LSP
 
 # packet = in string, should be converted to bytes before sending
@@ -143,7 +137,7 @@ def sendPacket(ADDRESS , packet: str , packetID):
     
   except Exception as e :
     # traceback.s_print_exc()
-    s_print(f"Could not connect to {ADDRESS}")
+    s_print(f"Connection failed to {ADDRESS}")
     return False
   
   
@@ -152,7 +146,7 @@ def broadCast(packet: str):
   decodePacket = packet.split("#")
   if(decodePacket[0] in checker ):
     return
-  s_print(f"broadcasting... packet_id: {decodePacket[ID_INDEX]}")
+  s_print(f"Broadcast packet_id: {decodePacket[ID_INDEX]}")
   
   currentReceivers = neighour
   
@@ -197,7 +191,7 @@ def packetReceive(client_socket, addr):
   broadCastThread = threading.Thread(target=broadCast, args=(packet,))
   broadCastThread.start()
   
-def updateLinkWeight():
+def UpdateLinkCost():
   while True:
     time.sleep(LINK_UPDATE_DURATION)
     neighbourToUpdateIndex = random.randint(0, len(neighour) - 1)
@@ -227,7 +221,7 @@ def main():
   broadCastThread = threading.Thread(target=broadCast, args=(LSP,))
   broadCastThread.start()
   
-  updateLinkWeightThread = threading.Thread(target=updateLinkWeight, args=())
+  updateLinkWeightThread = threading.Thread(target=UpdateLinkCost, args=())
   updateLinkWeightThread.start()
 
   s_print(f"[*] Listening on {host}:{port}")
@@ -235,12 +229,12 @@ def main():
   try:
     while True:
         client_socket, addr = server_socket.accept()
-        s_print(f"[*] Accepted connection from {addr[0]}:{addr[1]}")
+        s_print(f"Connected to {addr[0]}:{addr[1]}")
 
         client_handler = threading.Thread(target=packetReceive, args=(client_socket, addr,))
         client_handler.start()
   except KeyboardInterrupt:
-    s_print("\n[*] Server shutting down.")
+    s_print(Color.RED + "\nServer Closed."+ Color.END)
   finally:
     server_socket.close()
 
