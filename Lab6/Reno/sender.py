@@ -112,6 +112,7 @@ while True:
         packet = packet_encode(sequence_number, ack_number, rwnd, 1, payloadlen, payload, destination_port)
         client_socket.send(packet)
         print(f'send seq:{sequence_number}')
+        print("cwnd: ",cwnd)
     
     
 

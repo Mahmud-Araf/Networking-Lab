@@ -62,6 +62,7 @@ while True:
 
     # print(sequence_number,ack_number,window,0,payload_size)
     client_socket.send(packet)
+    print("window: " ,window)
     print(f'Sent packet {sequence_number}')
 
     # Wait for acknowledgment from client
