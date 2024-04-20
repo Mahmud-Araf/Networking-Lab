@@ -173,8 +173,8 @@ def updateGraph(info):
   shortest_distance, parent = dijkstra(adjMatrix, ID)
   s_print("Ran Dijkstra. Current state is: ")
   for i in range(1, len(shortest_distance)):
-    s_print(f"Node: {i}, shortest distance: {shortest_distance[i]}, parent: {parent[i]}")
-      
+    if i<=6:
+      s_print(f"Node: {i}, shortest distance: {shortest_distance[i]}, parent: {parent[i]}")
 
 def addToGraph(content):
     splittedRow = content.split("\n")
