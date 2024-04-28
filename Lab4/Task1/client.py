@@ -1,7 +1,7 @@
 import socket
 import struct
 
-ADDR = ('localhost', 9000)
+ADDR = ('localhost', 6000)
 SIZE = 1024
 FORMAT = 'utf-8'
 

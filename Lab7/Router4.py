@@ -1,4 +1,5 @@
 import socket
+import sys
 import threading
 import os
 import numpy as np
@@ -40,7 +41,7 @@ NEIGHBOUR_ADDRESS = {
   5 : (IP_ADDRESS, 8892),
   6 : (IP_ADDRESS, 8893)
 }
-neighour = []
+neighbour = []
 adjMatrix = np.array (np.full((ROWS, COLS), np.inf) )
 distanceArray = np.array (np.full((ROWS , COLS) , np.inf))
 
@@ -70,7 +71,7 @@ def construct_initial_graph():
   splittedData = fileInformation.split("\n")
   for data in splittedData:
     numbers = data.split(",")
-    neighour.append(int(numbers[1]))
+    neighbour.append(int(numbers[1]))
     adjMatrix[int(numbers[0])][int(numbers[1])] = int(numbers[2])
     # adjMatrix[int(numbers[1])][int(numbers[0])] = int(numbers[2])
   
@@ -80,7 +81,7 @@ def construct_initial_graph():
   s_print(splittedData)
 
 def dijkstra(graph, start):
-  num_vertices = len(graph)
+  num_vertices = int(sys.argv[1]) + 1
   start_time = time.time() * 1000
 
   shortest_distances = np.full(num_vertices, np.inf)
@@ -148,7 +149,7 @@ def broadCast(packet: str):
     return
   s_print(f"Broadcast packet_id: {decodePacket[ID_INDEX]}")
   
-  currentReceivers = neighour
+  currentReceivers = neighbour
   
   while len(currentReceivers) > 0:
     flag = False
@@ -195,8 +196,8 @@ def packetReceive(client_socket, addr):
 def UpdateLinkCost():
   while True:
     time.sleep(LINK_UPDATE_DURATION)
-    neighbourToUpdateIndex = random.randint(0, len(neighour) - 1)
-    neighbourToUpdate = neighour[neighbourToUpdateIndex]
+    neighbourToUpdateIndex = random.randint(0, len(neighbour) - 1)
+    neighbourToUpdate = neighbour[neighbourToUpdateIndex]
     new_weight = random.randint(1, 100)
     new_link = f"{ID},{neighbourToUpdate},{new_weight}"
     

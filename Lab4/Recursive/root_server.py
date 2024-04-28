@@ -4,8 +4,8 @@ import struct
 import threading
 
 IP = 'localhost'
-ROOT_PORT = 8001
-TLD_PORT = 8002
+ROOT_PORT = 9001
+TLD_PORT = 9002
 BUFFER_SIZE = 1024
 FORMAT = "utf-8"
 TTL = 6
@@ -80,6 +80,7 @@ def validate_ip(s):
 
 def start_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server.bind((IP, ROOT_PORT))
     print(f"Root Server listening on {IP}:{ROOT_PORT}")
 

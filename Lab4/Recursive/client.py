@@ -1,7 +1,7 @@
 import socket
 import time
 IP = 'localhost'
-LOCAL_PORT = 8000
+LOCAL_PORT = 9000
 BUFFER_SIZE = 1024
 FORMAT = "utf-8"
 

@@ -1,7 +1,7 @@
 import socket,time,struct
 
 IP = 'localhost'
-AUTH_PORT = 8003
+AUTH_PORT = 9003
 BUFFER_SIZE = 1024
 FORMAT = "utf-8"
 

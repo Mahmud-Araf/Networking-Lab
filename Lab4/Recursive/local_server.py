@@ -4,8 +4,8 @@ import time
 import threading
 
 IP = 'localhost'
-LOCAL_PORT = 8000
-ROOT_PORT = 8001
+LOCAL_PORT = 9000
+ROOT_PORT = 9001
 BUFFER_SIZE = 1024
 FORMAT = "utf-8"
 TTL = 3
@@ -89,6 +89,7 @@ def validate_ip(s):
 
 def start_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server.bind((IP, LOCAL_PORT))
     print(f"Local Server listening on {IP}:{LOCAL_PORT}")
 

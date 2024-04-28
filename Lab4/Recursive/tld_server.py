@@ -1,8 +1,8 @@
 import socket,time,struct,threading
 
 IP = 'localhost'
-TLD_PORT = 8002
-AUTH_PORT = 8003
+TLD_PORT = 9002
+AUTH_PORT = 9003
 BUFFER_SIZE = 1024
 FORMAT = "utf-8"
 TTL = 3
@@ -71,6 +71,7 @@ def validate_ip(s):
 
 def start_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server.bind((IP, TLD_PORT))
     print(f"TLD Server listening on {IP}:{TLD_PORT}")
 

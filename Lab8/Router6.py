@@ -75,40 +75,38 @@ def construct_initial_graph():
     adjMatrix[int(numbers[0])][int(numbers[1])] = int(numbers[2])
   s_print(splittedData)
 
-def dijkstra(graph, start):
-  num_vertices = int(sys.argv[1]) + 1
-  start_time = time.time() * 1000
+def bellman_ford(graph, start):
+    num_vertices = int(sys.argv[1]) + 1
+    start_time = time.time() * 1000
 
-  shortest_distances = np.full(num_vertices, np.inf)
-  parent = np.full(num_vertices, -1)
-  visited = np.full(num_vertices, False)
-  shortest_distances[start] = 0
+    shortest_distances = np.full(num_vertices, np.inf)
+    parent = np.full(num_vertices, -1)
+    shortest_distances[start] = 0
 
-  for _ in range(num_vertices):
-    min_dist = np.inf
-    min_index = -1
-    
-    # Find the vertex with the shortest distance
+    # Relax edges |V| - 1 times
+    for _ in range(num_vertices - 1):
+        for v in range(num_vertices):
+            for w in range(num_vertices):
+                if graph[v][w] != 0 and shortest_distances[v] != np.inf:
+                    new_dist = shortest_distances[v] + graph[v][w]
+                    if new_dist < shortest_distances[w]:
+                        parent[w] = v
+                        shortest_distances[w] = new_dist
+
+    # Check for negative-weight cycles
     for v in range(num_vertices):
-        if not visited[v] and shortest_distances[v] < min_dist:
-            min_dist = shortest_distances[v]
-            min_index = v
-    
-    visited[min_index] = True
-    
-    # Update distances for vertices adjacent to the current vertex
-    for v in range(num_vertices):
-        if not visited[v] and graph[min_index][v] != 0 and shortest_distances[min_index] != np.inf:
-            new_dist = shortest_distances[min_index] + graph[min_index][v]
-            if new_dist < shortest_distances[v]:
-              parent[v] = min_index
-              shortest_distances[v] = new_dist
+        for w in range(num_vertices):
+            if graph[v][w] != 0 and shortest_distances[v] != np.inf:
+                new_dist = shortest_distances[v] + graph[v][w]
+                if new_dist < shortest_distances[w]:
+                    s_print(Color.RED + "Graph contains a negative-weight cycle" + Color.END)
+                    return None, None
 
-  end_time = time.time() * 1000
-  total_time = end_time - start_time
-  s_print(Color.GREEN + f"Dijkstra's Algorithm Running Time: {total_time}ms" + Color.END)
-                  
-  return shortest_distances, parent
+    end_time = time.time() * 1000
+    total_time = end_time - start_time
+    s_print(Color.GREEN + f"Bellman-Ford Algorithm Running Time: {total_time}ms" + Color.END)
+
+    return shortest_distances, parent
 
 
 # returns a string
@@ -117,9 +115,9 @@ def create_packet(content: str):
   global message_id
   packet_id = f"{ID}00000000{message_id}"
   message_id += 1
-  LSP = f"{packet_id}#{TTL}#{content}"
+  DVP = f"{packet_id}#{TTL}#{content}"
   s_print(f"Packet sent: {packet_id}")
-  return LSP
+  return DVP
 
 # packet = in string, should be converted to bytes before sending
 def sendPacket(ADDRESS , packet: str , packetID):
@@ -165,8 +163,8 @@ def updateGraph(info):
     s_print(f"data is {data}")
     adjMatrix[int(data[0])][int(data[1])] = int(data[2])
 
-  shortest_distance, parent = dijkstra(adjMatrix, ID)
-  s_print("Ran Dijkstra. Current state is: ")
+  shortest_distance, parent = bellman_ford(adjMatrix, ID)
+  s_print("Ran Bellman-Ford. Current state is: ")
   for i in range(1, len(shortest_distance)):
     if i<=6:
       s_print(f"Node: {i}, shortest distance: {shortest_distance[i]}, parent: {parent[i]}")
@@ -212,9 +210,9 @@ def main():
   server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
   server_socket.bind((host, port))
   server_socket.listen(5)
-  LSP = create_packet(fileInformation)
+  DVP = create_packet(fileInformation)
   
-  broadCastThread = threading.Thread(target=broadCast, args=(LSP,))
+  broadCastThread = threading.Thread(target=broadCast, args=(DVP,))
   broadCastThread.start()
   
   updateLinkWeightThread = threading.Thread(target=UpdateLinkCost, args=())

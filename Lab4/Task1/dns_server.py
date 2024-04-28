@@ -5,7 +5,7 @@ import struct
 import time
 
 IP = ''
-PORT = 9000
+PORT = 6000
 ADDR = (IP, PORT)
 VOLUME = 1024
 FORMAT = "utf-8"
@@ -26,7 +26,7 @@ def handle_client(data, addr, server):
     auth_rr = 0
     add_rr = 0
     question = question.encode(FORMAT)
-    answer = None
+    answer = 'No IP found' #None
 
     file = open('dns_records.txt', 'r')
 
@@ -109,7 +109,9 @@ def handle_client(data, addr, server):
                 answer = value[i]
                 print(answer)
                 break
-        
+    else:
+        print('Invalid query type')
+        answer = 'Invalid query type'    
     print(answer)
     answer = answer.encode(FORMAT)
     packed_data = struct.pack(f'!7i{len(question)}s{len(answer)}s', id, flag, q, a, auth_rr, add_rr, len(question), question, answer)
@@ -129,11 +131,13 @@ def main():
     print(f"[LISTENING] Server is listening on {IP}:{PORT}.")
 
     while True:
-        data, addr = server.recvfrom(VOLUME)
-        data = data.decode(FORMAT)
-        thread = threading.Thread(target=handle_client, args=(data, addr,server))
-        thread.start()
-        print(f"[ACTIVE CONNECTIONS] {threading.active_count() - 1}")
-
+        try:
+            data, addr = server.recvfrom(VOLUME)
+            data = data.decode(FORMAT)
+            thread = threading.Thread(target=handle_client, args=(data, addr,server))
+            thread.start()
+            print(f"[ACTIVE CONNECTIONS] {threading.active_count() - 1}")
+        except KeyboardInterrupt:
+            break
 if __name__ == "__main__":
     main()
