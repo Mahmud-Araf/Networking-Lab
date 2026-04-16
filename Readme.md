@@ -1,4 +1,4 @@
-## This is the Respository for Computer Networking Lab
+## Computer Networking Lab
 
 This repository consists of the lab works of CSE-3111: Computer Networking Lab
 
